@@ -61,7 +61,6 @@ input,
   background-color: rgb(215, 244, 252);
 }
 
-#petList,
 .form-container,
 .pet-title {
   display: grid;

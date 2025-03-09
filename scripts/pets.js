@@ -1,17 +1,47 @@
 function showPets() {
   let pets = JSON.parse(localStorage.getItem("pets")) || [];
-  let petList = document.getElementById("petList");
+  let petTable = document.getElementById("petTable");
   let petCount = document.getElementById("petCount");
   let petAverageAge = document.getElementById("petAverageAge");
 
-  petList.innerHTML = "";
+  petTable.innerHTML = "";
   petCount.textContent = `Total pets: ${pets.length}`;
 
-  pets.forEach((pet) => {
-    let li = document.createElement("li");
-    li.classList.add("list-group-item", "card");
-    li.textContent = `${pet.name}, ${pet.age} years old, ${pet.gender}. Breed: ${pet.breed} - ${pet.service}`;
-    petList.appendChild(li);
+  pets.forEach((pet, index) => {
+    let tr = document.createElement("tr");
+
+    let tdName = document.createElement("td");
+    tdName.textContent = pet.name;
+
+    let tdAge = document.createElement("td");
+    tdAge.textContent = pet.age;
+
+    let tdGender = document.createElement("td");
+    tdGender.textContent = pet.gender;
+
+    let tdBreed = document.createElement("td");
+    tdBreed.textContent = pet.breed;
+
+    let tdService = document.createElement("td");
+    tdService.textContent = pet.service;
+
+    let tdAction = document.createElement("td");
+    let deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    deleteButton.classList.add("btn", "btn-danger");
+    deleteButton.onclick = function () {
+      deletePet(index);
+    };
+    tdAction.appendChild(deleteButton);
+
+    tr.appendChild(tdName);
+    tr.appendChild(tdAge);
+    tr.appendChild(tdGender);
+    tr.appendChild(tdBreed);
+    tr.appendChild(tdService);
+    tr.appendChild(tdAction);
+
+    petTable.appendChild(tr);
   });
 
   calculateAverageAge(pets, petAverageAge);
@@ -27,6 +57,13 @@ function calculateAverageAge(pets, displayElement) {
   let averageAge = (totalAge / pets.length).toFixed(2);
 
   displayElement.textContent = `Average age: ${averageAge} years`;
+}
+
+function deletePet(index) {
+  let pets = JSON.parse(localStorage.getItem("pets")) || [];
+  pets.splice(index, 1);
+  localStorage.setItem("pets", JSON.stringify(pets));
+  showPets(); // Se actualiza la tabla
 }
 
 window.addEventListener("load", showPets);
